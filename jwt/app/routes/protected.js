@@ -3,6 +3,7 @@ import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixi
 import ENV from '../config/environment';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
+    myNotification : Ember.inject.service('my-notificatoin'),
     model: function() {
         var self = this;
         return Ember.$.get(ENV['API-URL']+'/protected').then(function(response) {
@@ -10,6 +11,10 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         }, function(reason) {
             return self.transitionTo('login');
         });
-
+    },
+    actions: {
+        doTest: function() {
+            this.get('myNotification').anotherTest();
+        }
     }
 });

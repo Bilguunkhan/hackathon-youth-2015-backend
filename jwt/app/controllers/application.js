@@ -1,6 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
+    myNotification : Ember.inject.service('my-notificatoin'),
     sessionData: Ember.computed('session.secure', function() {
         return JSON.stringify(this.get('session.secure'), null, '\t');
     }),
@@ -14,5 +15,10 @@ export default Ember.Controller.extend({
         }
 
         return JSON.stringify(tokenData, null, '\t');
-    })
+    }),
+    actions: {
+        doMyTest: function() {
+            this.get('myNotification').anotherTest();
+        }
+    }
 });

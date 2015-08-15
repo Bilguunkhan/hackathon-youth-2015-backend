@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from flask_jwt import JWT, jwt_required 
+from flask_jwt import JWT, jwt_required, current_user
 from flask.ext.cors import CORS 
 from flask.ext.sqlalchemy import SQLAlchemy
 import json
@@ -22,24 +22,22 @@ jwt = JWT(app)
 def authenticate(username, password):
     u = User.query.filter_by(username=username, password=password).first()
     if u:
-        result = {}
-        result['username'] = u.username
-        result['email'   ] = u.email
         return u
 
 @jwt.user_handler
 def load_user(payload):
-    if payload['user_id'] ==1:
-        return User(id=1, username='joe')
+    print "LOAD USER "
+    print payload['user_id']
+    u = User.query.get(payload['user_id'])
+    return u
 
 @app.route('/protected')
 @jwt_required()
 def protected():
-    return 'Success!'
+    return 'Success! current user id is '+str(current_user.id)
 
 # Registration
 @app.route('/api/v1/users', methods=['POST'])
-#@jwt_required()
 def register():
     user = request.get_json()['user']
     username = user['username']

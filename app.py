@@ -7,14 +7,14 @@ import json, os, uuid
 
 app = Flask(__name__)
 #cors = CORS(app, resources={r"/*": {"origins": "*", "methods": "*"}})
-cors = CORS(app)
+#cors = CORS(app)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 app.debug = True
 app.config.from_object('config')
 app.config['SECRET_KEY'] = 'super-secret'
 db = SQLAlchemy(app)
 from models import *
 db.create_all()
-
 
 jwt = JWT(app)
 

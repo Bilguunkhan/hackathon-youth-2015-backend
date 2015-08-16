@@ -184,6 +184,7 @@ def get_apartments():
     return json.dumps({"apartments": arr})
 
 
+# Message resource
 @app.route('/api/v1/messages', methods=['POST'])
 @jwt_required()
 def create_message():
@@ -199,6 +200,20 @@ def create_message():
     result['owner'] = m.owner
     return json.dumps({"message": result})
 
+@app.route('/api/v1/messages', methods=['GET'])
+@jwt_required()
+def get_messages():
+    messages = Message.query.all()
+    arr = []
+    for message in messages:
+        if message.id==current_user.id:
+            result = {}
+            result['id'   ] = message.id
+            result['text' ] = message.text
+            result['owner'] = message.owner
+            arr.append(result)
+    return json.dumps({"messages": arr})
+    
 
 
 if __name__ == '__main__':

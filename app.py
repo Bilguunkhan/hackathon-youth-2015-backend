@@ -29,6 +29,10 @@ def load_user(payload):
     u = User.query.get(payload['user_id'])
     return u
 
+@jwt.error_handler
+def error_handler(e):
+    return "Authentication required", 401
+
 @app.route('/protected')
 @jwt_required()
 def protected():
@@ -214,8 +218,6 @@ def get_messages():
             arr.append(result)
     return json.dumps({"messages": arr})
     
-
-
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5001, debug=True)
 
